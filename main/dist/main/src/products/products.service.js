@@ -22,7 +22,7 @@ let ProductsService = class ProductsService {
         this.productModel = productModel;
     }
     async all() {
-        return await this.productModel.find();
+        return this.productModel.find();
     }
 };
 ProductsService = __decorate([

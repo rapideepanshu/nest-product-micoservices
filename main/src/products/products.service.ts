@@ -11,6 +11,12 @@ export class ProductsService {
   ) {}
 
   async all(): Promise<Product[]> {
-    return await this.productModel.find();
+    return this.productModel.find();
+  }
+
+  async create(data): Promise<Product> {
+    console.log(data);
+    const newProduct = new this.productModel(data);
+    return newProduct.save();
   }
 }

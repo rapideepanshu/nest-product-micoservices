@@ -22,7 +22,12 @@ let ProductsService = class ProductsService {
         this.productModel = productModel;
     }
     async all() {
-        return await this.productModel.find();
+        return this.productModel.find();
+    }
+    async create(data) {
+        console.log(data);
+        const newProduct = new this.productModel(data);
+        return newProduct.save();
     }
 };
 ProductsService = __decorate([

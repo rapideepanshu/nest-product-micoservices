@@ -1,6 +1,6 @@
-import { ProductsService } from './../../../admin/src/products/products.service';
 import { Controller, Get } from '@nestjs/common';
 import { EventPattern } from '@nestjs/microservices';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
@@ -11,8 +11,14 @@ export class ProductsController {
     return this.productService.all();
   }
 
-  @EventPattern('hi')
-  async hello(data: string) {
-    console.log(data);
+  @EventPattern('product_created')
+  async handleCreateProduct(product: any) {
+    console.log('product', product);
+    this.productService.create({
+      id: product.id,
+      title: product.title,
+      image: product.image,
+      likes: product.likes,
+    });
   }
 }

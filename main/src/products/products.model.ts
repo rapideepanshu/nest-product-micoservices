@@ -8,7 +8,7 @@ export class Product {
   @Prop()
   id: number;
   @Prop()
-  name: string;
+  title: string;
   @Prop()
   image: string;
   @Prop()

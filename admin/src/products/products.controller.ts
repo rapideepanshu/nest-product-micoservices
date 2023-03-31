@@ -9,8 +9,7 @@ import {
   Delete,
   Inject,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices/client';
-import { EventPattern } from '@nestjs/microservices';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('products')
 export class ProductsController {
@@ -21,18 +20,14 @@ export class ProductsController {
 
   @Get()
   async all() {
-    this.client.emit('hi', 'Hi from admin');
     return this.productService.all();
-  }
-
-  @EventPattern('hi')
-  async test() {
-    return 1;
   }
 
   @Post()
   async create(@Body('title') title: string, @Body('image') image: string) {
-    return this.productService.create({ title, image });
+    const product = await this.productService.create({ title, image });
+    this.client.emit('product_created', product);
+    return product;
   }
 
   @Get(':id')
@@ -46,11 +41,19 @@ export class ProductsController {
     @Body('title') title: string,
     @Body('image') image: string,
   ) {
-    return this.productService.update(id, { title, image });
+    await this.productService.update(id, { title, image });
+
+    const product = await this.productService.get(id);
+
+    this.client.emit('product_updated', product);
+
+    return product;
   }
 
   @Delete(':id')
   async delete(@Param('id') id: number) {
-    return this.productService.delete(id);
+    await this.productService.delete(id);
+
+    this.client.emit('product_deleted', id);
   }
 }

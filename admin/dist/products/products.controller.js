@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsController = void 0;
 const products_service_1 = require("./products.service");
 const common_1 = require("@nestjs/common");
-const client_1 = require("@nestjs/microservices/client");
 const microservices_1 = require("@nestjs/microservices");
 let ProductsController = class ProductsController {
     constructor(productService, client) {
@@ -23,23 +22,25 @@ let ProductsController = class ProductsController {
         this.client = client;
     }
     async all() {
-        this.client.emit('hi', 'Hi from admin');
         return this.productService.all();
     }
-    async test() {
-        return 1;
-    }
     async create(title, image) {
-        return this.productService.create({ title, image });
+        const product = await this.productService.create({ title, image });
+        this.client.emit('product_created', product);
+        return product;
     }
     async get(id) {
         return this.productService.get(id);
     }
     async update(id, title, image) {
-        return this.productService.update(id, { title, image });
+        await this.productService.update(id, { title, image });
+        const product = await this.productService.get(id);
+        this.client.emit('product_updated', product);
+        return product;
     }
     async delete(id) {
-        return this.productService.delete(id);
+        await this.productService.delete(id);
+        this.client.emit('product_deleted', id);
     }
 };
 __decorate([
@@ -48,12 +49,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "all", null);
-__decorate([
-    (0, microservices_1.EventPattern)('hi'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ProductsController.prototype, "test", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)('title')),
@@ -89,7 +84,7 @@ ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __param(1, (0, common_1.Inject)('PRODUCT_SERVICE')),
     __metadata("design:paramtypes", [products_service_1.ProductsService,
-        client_1.ClientProxy])
+        microservices_1.ClientProxy])
 ], ProductsController);
 exports.ProductsController = ProductsController;
 //# sourceMappingURL=products.controller.js.map

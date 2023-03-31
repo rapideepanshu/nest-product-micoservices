@@ -4,4 +4,5 @@ export declare class ProductsService {
     private readonly productModel;
     constructor(productModel: Model<ProductDocument>);
     all(): Promise<Product[]>;
+    create(data: any): Promise<Product>;
 }

@@ -26,7 +26,7 @@ import { Document } from 'mongoose';
 export type ProductDocument = Product & Document;
 export declare class Product {
     id: number;
-    name: string;
+    title: string;
     image: string;
     likes: string;
 }

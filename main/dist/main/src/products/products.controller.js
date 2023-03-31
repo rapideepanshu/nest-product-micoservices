@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "all", null);
 __decorate([
-    (0, microservices_1.EventPattern)('hi'),
+    (0, microservices_1.EventPattern)('all-products'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

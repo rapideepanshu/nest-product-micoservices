@@ -20,7 +20,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], Product.prototype, "name", void 0);
+], Product.prototype, "title", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)

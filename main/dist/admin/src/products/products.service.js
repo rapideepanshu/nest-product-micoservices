@@ -17,11 +17,14 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const products_entity_1 = require("./products.entity");
+const microservices_1 = require("@nestjs/microservices");
 let ProductsService = class ProductsService {
-    constructor(productRepository) {
+    constructor(productRepository, client) {
         this.productRepository = productRepository;
+        this.client = client;
     }
     async all() {
+        this.client.emit('all-products', 'Hi from admin');
         return await this.productRepository.find();
     }
     async create(data) {
@@ -40,7 +43,9 @@ let ProductsService = class ProductsService {
 ProductsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(products_entity_1.Products)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, common_1.Inject)('PRODUCT_SERVICE')),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        microservices_1.ClientProxy])
 ], ProductsService);
 exports.ProductsService = ProductsService;
 //# sourceMappingURL=products.service.js.map
